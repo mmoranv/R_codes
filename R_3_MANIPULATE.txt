@@ -1,0 +1,155 @@
+############# MANIPULATE DATASETS
+
+#Filter (easier using %>%)
+NEW_DATASET <- OLD_DATASET %>%
+	filter(VARIABLE == CONDITION)
+
+#SUBSETS Filter using subsets (easier for using ! and %in% operators )
+NEW_DATASET == subset(OLD_DATASET, operators(VARIABLE == CONDITION))
+
+#LIKE
+%like% "%er%"
+
+#Transform same variable
+mtcars %<>% transform(cyl = cyl * 2)
+
+## Append datasets (same columns, one above the other)
+bind_rows(dataset1, dataset2, dataset3, ...)
+
+## Append datasets (same rows, side by side)
+cbind(dataset1, dataset2, dataset3, ...)
+
+## Columns names
+dput(colnames(dataset))
+
+#Reorder columns
+dataset1[,c(1,2,3,4,5:100)]
+dataset2 <- dataset1[,c(5,2,5:99,4,100,3)]
+
+#Select values and assign value
+DATASET[vector of columns] <- "VALUE"
+
+#Change value of rows
+DATASET[DATASET$VARIABLE == CONDITION] <- "VALUE"
+DATASET$VAR_1[DATASET$VAR_2 == "VALUE"] <- "NEW_VALUE" #conditional to other variable
+
+#Delete columns
+DATASET[vector of columns] <- NULL
+
+# Reshape tables, collapse
+data <- melt(mydata, id=c("id","time"))
+cast(data, formula, function)
+
+#Create ID column
+id <- rownames(d)
+d <- cbind(id=id, d)
+
+#Keep only certain number of rows by certain characteristics
+filter(row_number(desc(VARIABLE)) == 1)
+
+## Columns names
+colnames(d) <- paste0("V", 1:ncol(d))
+colnames(d) <- c(vector)?
+
+#Collapse rows summing values
+aggregate(VARIABLE_TO_SUM ~ ID_VARIABLE, data=DATASET, by=LIST OF VARIABLES, FUN=AGGREGATING_FUNCTION, na.rm=TRUE)
+aggregate(. ~ID_VARIABLE_1+ID_VARIABLE_2, data=DATASET, FUN=AGGREGATING_FUNCTION, na.rm=TRUE) #the "." stands for every variable, when you want to aggreagate all at once
+
+testDF <- data.frame(v1 = c(1,3,5,7,8,3,5,NA,4,5,7,9),
+                     v2 = c(11,33,55,77,88,33,55,NA,44,55,77,99) )
+by1 <- c("red", "blue", 1, 2, NA, "big", 1, 2, "red", 1, NA, 12)
+by2 <- c("wet", "dry", 99, 95, NA, "damp", 95, 99, "red", 99, NA, NA)
+aggregate(x = testDF, by = list(by1, by2), FUN = "mean")
+
+#Collapse rows pasting attributes
+
+## Transform to numbers
+as.numeric(VECTOR) #CAREFUL, factors do not translate well, try first to transform to chr and then to num
+
+# Find and drop duplicates
+#library(tidyverse)
+UNIQUE_DATASET %>% distinct(var1, var2, .keep_all = TRUE) #extract only unique values on variable 1 and 2
+
+duplicated(dataset) #vector of duplicates
+dataset[duplicated(dataset$var1)|duplicated(dataset$var1, fromLast=TRUE),] # select all duplicates on variable 1....
+
+#Create a table from vectors
+ADDR <- c("448 Lafayette Ave","727 Manhattan Ave","31-00 47th Ave","308 E 78th S","10 Morton St")
+ZIP_CODE <- c("11205","11222","11101","10075","10014")
+BORO_CODE <- c(3,3,4,1,1)
+u_id <- 1:length(ADDR)
+df = data.frame(u_id, ADDR, ZIP_CODE, BORO_CODE)
+
+#Summarise by certain features (n, median, mean, max, min options)
+group_by(CHARACTERISTIC) %>%
+  summarise(SUMMARISING_VAR_NAME = SUMMARISE_OPTION())
+
+#Change levels/factors
+levels(DATASET$VARIABLE)[levels(DATASET$VARIABLE) == "VALUE 1"] <- "NEW VALUE"
+
+#############STRING
+
+#String: Convert
+as.character()
+
+#String: extract
+substr(x, start, stop)
+
+#String: Separate vector
+strsplit("vector","SEPARATOR",fixed = TRUE)
+
+#String: Separate column
+ICAP_19_w_PLUTO %>%
+  separate(COLUMN TO SEPARATE, into = "NAME OF NEW COLUMN", sep = "SEPARATOR")
+
+#String: Concatenate
+paste(JOIN1,JOIN2, sep = "SEPARATOR")
+
+#String Seek and destroy
+str_detect()
+str_replace()
+
+###############TIME (https://www.stat.berkeley.edu/~s133/dates.html)
+#TIME: Convert
+as.POSIXct()
+
+#Extract time units (can be added, substracted, anything)
+format(x, "UNITS")
+
+#TIME: Time differences units= "auto", "secs", "mins", "hours", "days", or "weeks"
+difftime(b2,b1,units='UNITS')
+
+#TIME: Converting hh:mm:ss to decimal hours, time
+
+asdf <- c("12:34:56","12:00:00","06:01:49","1:30:00")
+
+hhmmss2dec <- function(x) {
+  xlist <- strsplit(x,split=":")
+  h <- as.numeric(sapply(xlist,"[",1))
+  m <- as.numeric(sapply(xlist,"[",2))
+  s <- as.numeric(sapply(xlist,"[",3))
+  xdec <- h+(m/60)+(s/60/60)
+  return(xdec)
+}
+
+hhmmss2dec(asdf)
+12.582222 12.000000  6.030278  1.500000
+
+#################NUMERIC
+#NUMERIC: Drops non-numeric characters
+parse_number(x, na = c("", "NA"), locale = default_locale(),
+  trim_ws = TRUE)
+col_number()
+
+## Extract using "like"/GREP 
+haystack <- c("red", "blue", "green", "blue", "green forest")
+
+grep("green", haystack)
+
+grep("r", haystack) # returns position
+grep("r", haystack, value = TRUE) # returns value
+grepl("r", haystack) # returns boolean
+
+sub("e", "+", haystack) # replaces pattern with replacement (once)
+gsub("e", "+", haystack) # replaces pattern with replacement (global)
+#you can also use grep as a function to build a vector, but be mindful about what you want, values, positions or something else...

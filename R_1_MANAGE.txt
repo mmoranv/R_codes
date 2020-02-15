@@ -1,0 +1,16 @@
+###### MANAGE DATASETS
+
+#Import files
+filename <- read.csv('location/of/the/file.csv')
+
+#Export files
+write.csv(filename,file = "location/of/the/file.csv")
+
+# Regular expressions
+https://www.rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf
+
+#Take a glimpse
+glimpse()
+
+#Create, change variable conditional to other variable or condition
+mutate(VARIABLE_AFFECTED = ifelse(OTHER_VARIABLE == "VALUE" | is.na(OTHER_VARIABLE) == TRUE, OTHER_VARIABLE_2,OTHER_VARIABLE))

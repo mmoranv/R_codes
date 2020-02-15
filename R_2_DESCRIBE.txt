@@ -1,0 +1,17 @@
+############### DESCRIBE DATASETS
+
+## Min, max, etc, on different variables
+summary(dataset)
+
+# Sample values
+head(dataset, n=#number of rows)
+
+# #MISSING VALUES
+# 'aggr' plots the amount of missing/imputed values in each column
+library(VIM)
+aggr(dataset)
+
+#Quantiles
+quantile(DATASET)
+quantile(DATASET, probs = seq(0, 1, 0.25), na.rm = FALSE,
+         names = TRUE, type = 7, ...)

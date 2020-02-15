@@ -1,0 +1,21 @@
+################# MERGE DATASETS
+#Standard
+merge(x, y, by = intersect(names(x), names(y)),
+      by.x = by, by.y = by, all = FALSE, all.x = all, all.y = all,
+      sort = TRUE, suffixes = c(".x",".y"),
+      incomparables = NULL, ...)
+
+#Left join
+merge(x, y,
+      by.x = by, by.y = by, all.x = TRUE)
+
+left_join_df <- left_join(x,y, by = "")
+left_join_df <- left_join(x,y, by = c("by.x"="by.y"))
+
+#Tables
+smoke <- table(smokerData$Smoke,smokerData$SES)
+
+smoke <- matrix(c(51,43,22,92,28,21,68,22,9),ncol=3,byrow=TRUE)
+> colnames(smoke) <- c("High","Low","Middle")
+> rownames(smoke) <- c("current","former","never")
+> smoke <- as.table(smoke)
